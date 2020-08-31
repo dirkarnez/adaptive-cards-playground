@@ -1,0 +1,55 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/adaptivecards-templating/dist/adaptivecards-templating.min.js"></script>
+    <script src="https://unpkg.com/adaptivecards/dist/adaptivecards.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/markdown-it/dist/markdown-it.js"></script>
+</head>
+<body>
+    <script>
+        var templatePayload = {
+            "type": "AdaptiveCard",
+            "version": "1.0",
+            "body": [
+                {
+                    "type": "TextBlock",
+                    "text": "Hello ${name}!"
+                },
+                {
+                    "type": "Image",
+                    "url": "http://adaptivecards.io/content/cats/1.png"
+                },
+                {
+                    "type": "Input.Text"
+                }
+            ]
+        };
+        
+        // Create a Template instance from the template payload
+        var template = new ACData.Template(templatePayload);
+        
+        // Create a data binding context, and set its $root property to the
+        // data object to bind the template to
+        var context = {
+            $root: {
+                "name": "Adaptive Cards"
+            }
+        };
+        
+        // "Expand" the template - this generates the final Adaptive Card,
+        // ready to render
+        var card = template.expand(context);
+        
+        // Render the card
+        var adaptiveCard = new AdaptiveCards.AdaptiveCard();
+
+        AdaptiveCards.processMarkdown = function(text) { return markdownit().render(text); }
+        adaptiveCard.onExecuteAction = function(action) { alert("Ow!"); }
+
+        adaptiveCard.parse(card);
+
+        document.body.appendChild(adaptiveCard.render());
+    </script>
+</body>
+</html>
